@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'command_success' => 'Command executed successfully.',
     'down' => 'Put the application into maintenance / demo mode.',
     'key_generate' => 'Set the application key.',
     'migrate' => 'Apply migrations.',

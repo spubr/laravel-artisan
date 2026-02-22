@@ -12,6 +12,7 @@ class LaravelArtisanServiceProvider extends ServiceProvider
     {
         $this->registerRoutesPath();
         $this->registerTranslationsPath();
+        $this->registerViewComposer();
         $this->registerViewsPath();
 
         $this->publishes([
@@ -21,23 +22,39 @@ class LaravelArtisanServiceProvider extends ServiceProvider
         ]);
     }
 
+    protected function getBaseUrlFromServer(): string
+    {
+        $scheme = (! empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            ? 'https'
+            : 'http';
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+
+        return $scheme.'://'.$host;
+    }
+
     public function register()
     {
-        $this->registerRoutesPath();
-        $this->registerTranslationsPath();
-        $this->registerViewsPath();
-
         $this->app->bind('laravel-artisan', fn () => new LaravelArtisan());
     }
 
     protected function registerRoutesPath(): void
     {
-        $this->loadRoutesFrom(sprintf('%s/LaravelArtisanRoutes.php', __DIR__), $this->namespace);
+        $this->loadRoutesFrom(sprintf('%s/LaravelArtisanRoutes.php', __DIR__));
     }
 
     protected function registerTranslationsPath(): void
     {
         $this->loadTranslationsFrom(sprintf('%s/lang', __DIR__), $this->namespace);
+    }
+
+    protected function registerViewComposer(): void
+    {
+        $this->app['view']->composer(
+            sprintf('%s::*', $this->namespace),
+            function ($view): void {
+                $view->with('baseUrl', $this->getBaseUrlFromServer());
+            }
+        );
     }
 
     protected function registerViewsPath(): void

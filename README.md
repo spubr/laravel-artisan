@@ -10,8 +10,8 @@
 
 ## Requirements
 
-- Laravel 9.x
-- PHP 8.x
+- Laravel 12.x
+- PHP 8.2+
 
 ## Installation
 
@@ -23,9 +23,22 @@ composer require lebarbucodeur/laravel-artisan
 
 ## Configuration
 
-To bypass maintenance of the Artisan commands list page, you must add this line in the `app/Http/Middleware/PreventRequestsDuringMaintenance.php` file of your project :
+To bypass maintenance of the Artisan commands list page, add the following configuration.
 
-``` php
+**Laravel 11+** – In `bootstrap/app.php`:
+
+```php
+->withMiddleware(function (Middleware $middleware): void {
+    $middleware->preventRequestsDuringMaintenance(except: [
+        'artisan',
+        'artisan/*',
+    ]);
+})
+```
+
+**Laravel 9/10** – In `app/Http/Middleware/PreventRequestsDuringMaintenance.php`:
+
+```php
 protected $except = [
     '/artisan*',
 ];
