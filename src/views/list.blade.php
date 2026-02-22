@@ -23,7 +23,7 @@
             <ul>
                 @foreach ($commands as $slug => $cmd)
                     <li>
-                        <a href="{{ route('laravel-artisan.play', ['command' => $slug]) }}" title="{{ $cmd['description'] }}">
+                        <a href="{{ $baseUrl }}/artisan/{{ $slug }}" title="{{ $cmd['description'] }}">
                             {{ $cmd['cmd']}}
                         </a>
                     </li>

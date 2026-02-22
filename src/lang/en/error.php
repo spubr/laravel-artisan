@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'unknown_command' => 'Unknwown command.',
+    'unknown_command' => 'Unknown command.',
 ];

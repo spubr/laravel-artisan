@@ -66,8 +66,11 @@ class LaravelArtisan
         try {
             Artisan::call($cmd);
 
+            $output = Artisan::output();
+            $result = trim($output) !== '' ? $output : __('laravel-artisan::description.command_success');
+
             return $this->getViewFor('list', [
-                'result' => Artisan::output(),
+                'result' => $result,
                 'commands' => $this->getCommandsList(),
             ]);
         } catch (\Exception $e) {
